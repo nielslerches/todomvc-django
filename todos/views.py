@@ -15,6 +15,10 @@ class NextMixin(FormMixin):
             success_url = super().get_success_url()
         return success_url
 
+    def form_valid(self, form):
+        form.instance.session_id = self.request.session.session_key
+        return super().form_valid(form)
+
 
 class SessionTodosMixin(MultipleObjectMixin):
     def get_queryset(self):
