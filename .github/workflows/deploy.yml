@@ -1,0 +1,30 @@
+name: Deploy
+
+on:
+  schedule:
+    - cron: "0 6 * * 3"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - run: sudo apt-get install -y software-properties-common
+      - run: sudo apt-get update -y
+      - run: sudo pip3 install -r requirements.txt
+      - id: generate-secret-key
+        run: |
+          _SECRET_KEY=$(python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())')
+          echo "::add-mask::$_SECRET_KEY"
+          echo "::set-output name=secret-key::$_SECRET_KEY"
+      - run: heroku config:set SECRET_KEY=${{ steps.generate-secret-key.outputs.secret-key }}
+        env:
+          HEROKU_API_TOKEN: ${{ secrets.HEROKU_API_TOKEN }}
+      - run: heroku dyno:restart --app=todomvc-django
+        env:
+          HEROKU_API_TOKEN: ${{ secrets.HEROKU_API_TOKEN }}
