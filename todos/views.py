@@ -2,6 +2,7 @@ from django.urls import reverse_lazy
 from django.urls.base import reverse
 from django.views.generic import CreateView, UpdateView, ListView, DeleteView
 from django.views.generic.edit import FormMixin
+from django.views.generic.list import MultipleObjectMixin
 
 
 from .models import Todo
@@ -15,7 +16,14 @@ class NextMixin(FormMixin):
         return success_url
 
 
-class TodoListView(ListView):
+class SessionTodosMixin(MultipleObjectMixin):
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(session_key=self.request.session_key)
+        return queryset
+
+
+class TodoListView(SessionTodosMixin, ListView):
     model = Todo
     success_url = reverse_lazy("todos:todo_list")
 
@@ -25,11 +33,11 @@ class TodoCreateView(NextMixin, CreateView):
     success_url = reverse_lazy("todos:todo_list")
 
 
-class TodoUpdateView(NextMixin, UpdateView):
+class TodoUpdateView(SessionTodosMixin, NextMixin, UpdateView):
     model = Todo
     success_url = reverse_lazy("todos:todo_list")
 
 
-class TodoDeleteView(NextMixin, DeleteView):
+class TodoDeleteView(SessionTodosMixin, NextMixin, DeleteView):
     model = Todo
     success_url = reverse_lazy("todos:todo_list")
