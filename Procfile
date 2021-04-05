@@ -1,2 +1,1 @@
-release: python manage.py migrate
-web: gunicorn todomvc.wsgi
+web: python manage.py migrate && gunicorn todomvc.wsgi
