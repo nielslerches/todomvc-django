@@ -1,0 +1,91 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Todos</title>
+        <link rel="stylesheet" href="{% static 'todos/index.css' %}">
+    </head>
+
+    <body>
+        <section class="todoapp">
+            <header class="header">
+                <h1>todos</h1>
+                <form method="POST" action="{% url 'todos:todo_create' %}">
+                    {% csrf_token %}
+                    <input type="text" name="name" class="new-todo" placeholder="What needs to be done?" autofocus>
+                    <button style="display: none;"></button>
+                </form>
+            </header>
+            <section class="main">
+                <input id="toggle-all" class="toggle-all" type="checkbox">
+                <label for="toggle-all">Mark all as complete</label>
+                <ul class="todo-list">
+                    {% for obj in object_list %}
+                    <form
+                        id="id_todo_update_{{ obj.pk }}"
+                        method="POST"
+                        action="{% url 'todos:todo_update' obj.pk %}?next={{ request.path }}"
+                    >
+                        {% csrf_token %}
+                        <li {% if obj.done %}class="completed"{% endif %}>
+                            <div class="view">
+                                <input
+                                    onchange="event.target.form.submit();"
+                                    class="toggle"
+                                    type="checkbox"
+                                    name="done"
+                                    {% if obj.done %}checked="checked"{% endif %}
+                                >
+                                <label
+                                    ondblclick="event.target.parentElement.parentElement.classList.add('editing')"
+                                >
+                                    {{ obj }}
+                                </label>
+                                <button class="destroy" form="id_todo_delete_{{ obj.pk }}"></button>
+                            </div>
+                            <input
+                                tabindex="-1"
+                                class="edit"
+                                value="{{ obj.name }}"      
+                                name="name"
+                                required
+                                onblur="event.target.parentElement.classList.remove('editing')"
+                            >
+                        </li>
+                    </form>
+                    <form id="id_todo_delete_{{ obj.pk }}" method="POST" action="{% url 'todos:todo_delete' obj.pk %}?next={{ request.path }}">
+                        {% csrf_token %}
+                    </form>
+                    {% endfor %}
+                </ul>
+                <footer class="footer">
+                    <span class="todo-count"></span>
+                    <ul class="filters">
+                        <li>
+                            <a href="{% url 'todos:todo_list' %}"
+                                {% if request.resolver_match.url_name == 'todo_list' %}class="selected"{% endif %}
+                            >All</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'todos:todo_active_list' %}"
+                                {% if request.resolver_match.url_name == 'todo_active_list' %}class="selected"{% endif %}
+                            >Active</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'todos:todo_completed_list' %}"
+                                {% if request.resolver_match.url_name == 'todo_completed_list' %}class="selected"{% endif %}
+                            >Completed</a>
+                        </li>
+                    </ul>
+                    <button class="clear-completed">Clear completed</button>
+                </footer>
+            </section>
+        </section>
+    </body>
+
+</html>
