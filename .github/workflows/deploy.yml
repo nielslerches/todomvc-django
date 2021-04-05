@@ -23,7 +23,7 @@ jobs:
           _SECRET_KEY=$(python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())')
           echo "::add-mask::$_SECRET_KEY"
           echo "::set-output name=secret-key::$_SECRET_KEY"
-      - run: heroku config:set SECRET_KEY="${{ steps.generate-secret-key.outputs.secret-key }}""
+      - run: heroku config:set SECRET_KEY="${{ steps.generate-secret-key.outputs.secret-key }}"
         env:
           HEROKU_API_TOKEN: ${{ secrets.HEROKU_API_TOKEN }}
       - run: heroku dyno:restart --app=todomvc-django
