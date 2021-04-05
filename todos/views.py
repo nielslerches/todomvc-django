@@ -19,7 +19,7 @@ class NextMixin(FormMixin):
 class SessionTodosMixin(MultipleObjectMixin):
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(session_key=self.request.session_key)
+        queryset = queryset.filter(session_key=self.request.session.session_key)
         return queryset
 
 
