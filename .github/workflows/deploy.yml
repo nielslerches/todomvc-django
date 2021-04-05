@@ -25,10 +25,10 @@ jobs:
           echo "::set-output name=secret-key::$_SECRET_KEY"
       - run: heroku config:set --app=todomvc-django SECRET_KEY="${{ steps.generate-secret-key.outputs.secret-key }}"
         env:
-          HEROKU_API_TOKEN: ${{ secrets.HEROKU_API_TOKEN }}
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_TOKEN }}
       - run: heroku git:remote -a todomvc-django
         env:
-          HEROKU_API_TOKEN: ${{ secrets.HEROKU_API_TOKEN }}
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_TOKEN }}
       - run: git push heroku main
         env:
-          HEROKU_API_TOKEN: ${{ secrets.HEROKU_API_TOKEN }}
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_TOKEN }}
