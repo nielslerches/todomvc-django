@@ -16,7 +16,7 @@ class NextMixin(FormMixin):
         return success_url
 
     def form_valid(self, form):
-        if not self.request.session.exists(request.session.session_key):
+        if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
         form.instance.session_id = self.request.session.session_key
         return super().form_valid(form)
