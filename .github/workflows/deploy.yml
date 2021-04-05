@@ -16,6 +16,7 @@ jobs:
           fetch-depth: 0
       - run: sudo apt-get install -y software-properties-common
       - run: sudo apt-get update -y
+      - run: curl https://cli-assets.heroku.com/install-ubuntu.sh | sudo sh
       - run: sudo pip3 install -r requirements.txt
       - id: generate-secret-key
         run: |
