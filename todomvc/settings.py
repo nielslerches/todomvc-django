@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ["todomvc-django.herokuapp.com"]
 # Application definition
 
 INSTALLED_APPS = [
+    "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.staticfiles",
     "whitenoise",
