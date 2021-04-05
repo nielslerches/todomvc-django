@@ -37,7 +37,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.staticfiles",
-    "whitenouse.middleware.WhiteNouseMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "todos",
 ]
 
