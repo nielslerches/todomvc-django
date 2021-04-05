@@ -37,12 +37,13 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.staticfiles",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "whitenoise",
     "todos",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
